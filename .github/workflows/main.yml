@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '19'
+
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+
+    - name: Check with ESLint
+      run: pnpm lint
+
+    - name: Check with Prettier
+      run: pnpm prettier:check"
+
+
