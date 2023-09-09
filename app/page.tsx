@@ -1,7 +1,24 @@
-const Page = () => {
+import { currentUser } from '@clerk/nextjs';
+import { redirect } from 'next/navigation';
+
+export const checkUserLoggedIn = async (): Promise<boolean> => {
+  const user = await currentUser();
+
+  if (user) {
+    return true;
+  }
+  return false;
+};
+const Page = async () => {
+  const isLoggedIn = await checkUserLoggedIn();
+
+  if (isLoggedIn) {
+    redirect('/dashboard');
+  }
+
   return (
     <div>
-      <h1>This is a test of the landing page.</h1>
+      <p>This is a test of the landing page.</p>
     </div>
   );
 };
