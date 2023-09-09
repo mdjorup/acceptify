@@ -1,6 +1,6 @@
 import { ClerkProvider } from '@clerk/nextjs';
-import { NextUIProvider } from '@nextui-org/react';
 import { Noto_Sans_Display } from 'next/font/google';
+import { Providers } from './providers';
 
 export const metadata = {
   title: 'Acceptify',
@@ -18,11 +18,11 @@ export default function RootLayout({
 }) {
   return (
     <ClerkProvider>
-      <NextUIProvider>
-        <html lang="en" className={inter.className}>
-          <body>{children}</body>
-        </html>
-      </NextUIProvider>
+      <html lang="en" className={inter.className}>
+        <body>
+          <Providers>{children}</Providers>
+        </body>
+      </html>
     </ClerkProvider>
   );
 }

@@ -3,7 +3,7 @@ import { UserButton } from '@clerk/nextjs';
 const Home = () => {
   return (
     <div>
-      <h1>This is a test of the dashboard page.</h1>
+      <p>This is a test of the dashboard page.</p>
       <UserButton afterSignOutUrl="/" />
     </div>
   );
