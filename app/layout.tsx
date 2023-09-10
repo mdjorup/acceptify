@@ -2,6 +2,8 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { Noto_Sans_Display } from 'next/font/google';
 import { Providers } from './providers';
 
+import './globals.css';
+
 export const metadata = {
   title: 'Acceptify',
 };
