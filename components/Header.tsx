@@ -1,49 +1,33 @@
 'use client';
 
-import {
-  Button,
-  Link,
-  Navbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from '@nextui-org/react';
+import { UserButton } from '@clerk/nextjs';
+import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
+import { usePathname } from 'next/navigation';
+import { HeaderItem } from './HeaderItem';
 
-const Header = () => {
+export const Header = () => {
+  const pathname = usePathname();
+
   return (
     <Navbar>
       <NavbarBrand>
-        <p className="font-bold text-inherit">ACME</p>
+        <p className="text-neutral font-bold">Acceptify</p>
       </NavbarBrand>
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Features
-          </Link>
-        </NavbarItem>
-        <NavbarItem isActive>
-          <Link href="#" aria-current="page">
-            Customers
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="#">
-            Integrations
-          </Link>
-        </NavbarItem>
+        <HeaderItem
+          isActive={pathname === '/home'}
+          text="Home"
+          clickPath="/home"
+        />
+        <HeaderItem
+          isActive={pathname === '/submissions'}
+          text="Submissions"
+          clickPath="/submissions"
+        />
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        <UserButton afterSignOutUrl="/" />
       </NavbarContent>
     </Navbar>
   );
 };
-
-export default Header;
