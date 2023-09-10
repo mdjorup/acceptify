@@ -11,7 +11,7 @@ export const Header = () => {
   return (
     <Navbar>
       <NavbarBrand>
-        <p className="text-neutral font-bold">Acceptify</p>
+        <p className="font-bold text-neutral">Acceptify</p>
       </NavbarBrand>
       <NavbarContent className="hidden gap-4 sm:flex" justify="center">
         <HeaderItem
