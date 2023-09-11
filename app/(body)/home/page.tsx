@@ -6,11 +6,17 @@
  *
  *
  */
+import { SubmissionForm } from '@/components/SubmissionForm';
 
-const Dashboard = () => {
+import { getSchools } from '@/app/api/schools/getSchools';
+
+const Dashboard = async () => {
+  const schools = await getSchools();
+
   return (
     <div>
-      <p>This is a test of the dashboard page.</p>
+      <p>Submit an essay for review</p>
+      <SubmissionForm schools={schools} />
     </div>
   );
 };

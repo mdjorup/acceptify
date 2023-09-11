@@ -14,13 +14,13 @@ const Page = async () => {
   const isLoggedIn = await checkUserLoggedIn();
 
   if (isLoggedIn) {
-    redirect('/dashboard');
+    redirect('/home');
   }
 
   return (
     <div>
       <p>This is a test of the landing page.</p>
-      <Link href="/dashboard">Dashboard</Link>
+      <Link href="/home">Dashboard</Link>
     </div>
   );
 };
