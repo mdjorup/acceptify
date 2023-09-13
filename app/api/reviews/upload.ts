@@ -1,13 +1,15 @@
+'use server';
+
 import { v4 as uuidv4 } from 'uuid';
 
-export interface UploadSubmissionProps {
+interface UploadSubmissionProps {
   userId: string | null | undefined;
   school: string;
   essayPrompt: string;
   essayText: string;
 }
 
-export interface UploadSubmissionResponse {
+interface UploadSubmissionResponse {
   success: boolean;
   message?: string;
   reviewId?: string;

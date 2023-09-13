@@ -22,6 +22,8 @@ export const SubmissionForm = ({ schools }: SubmissionFormProps) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const [reviewId, setReviewId] = useState<string>('');
+
   const { userId } = useAuth();
 
   useEffect(() => {
@@ -83,10 +85,14 @@ export const SubmissionForm = ({ schools }: SubmissionFormProps) => {
     // await 2 seconds
 
     setIsLoading(false);
-    if (response.reviewId != null) {
-      redirect(`/reviews`);
+    if (response.reviewId) {
+      setReviewId(response.reviewId);
     }
   };
+
+  if (reviewId) {
+    redirect(`/reviews/${reviewId}`);
+  }
 
   return (
     <div className="mx-auto mt-10 w-10/12 space-y-4 p-6">
