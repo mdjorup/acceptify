@@ -6,7 +6,7 @@
  *
  *
  */
-import { SubmissionForm } from '@/components/SubmissionForm';
+import { SubmissionForm } from './SubmissionForm';
 
 import { getSchools } from '@/app/api/schools/getSchools';
 
@@ -15,7 +15,6 @@ const Dashboard = async () => {
 
   return (
     <div>
-      <p>Submit an essay for review</p>
       <SubmissionForm schools={schools} />
     </div>
   );

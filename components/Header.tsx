@@ -20,9 +20,9 @@ export const Header = () => {
           clickPath="/home"
         />
         <HeaderItem
-          isActive={pathname === '/submissions'}
-          text="Submissions"
-          clickPath="/submissions"
+          isActive={pathname === '/reviews'}
+          text="Reviews"
+          clickPath="/reviews"
         />
       </NavbarContent>
       <NavbarContent justify="end">
