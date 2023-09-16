@@ -91,7 +91,7 @@ export const SubmissionForm = ({ schools }: SubmissionFormProps) => {
   };
 
   if (reviewId) {
-    redirect(`/reviews/${reviewId}`);
+    redirect(`/reviews/${reviewId}/status`);
   }
 
   return (

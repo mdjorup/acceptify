@@ -1,11 +1,5 @@
-// in the style of a form
+const AllReviewsPage = () => {
+  // fetch all reviews for the given user
 
-const ReviewPage = () => {
-  return (
-    <div>
-      <p>This is a test of the review page.</p>
-    </div>
-  );
+  return <></>;
 };
-
-export default ReviewPage;
