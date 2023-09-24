@@ -21,6 +21,5 @@ module.exports = {
       error: '#f87272',
     },
   },
-  darkMode: 'class',
-  plugins: [nextui(), require('daisyui')],
+  plugins: [nextui()],
 };
