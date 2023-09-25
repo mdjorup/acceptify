@@ -1,4 +1,3 @@
-import { ClerkProvider } from '@clerk/nextjs';
 import { Noto_Sans_Display } from 'next/font/google';
 import { Providers } from './providers';
 
@@ -19,12 +18,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
-      <html lang="en" className={inter.className}>
-        <body>
-          <Providers>{children}</Providers>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en" className={inter.className}>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
   );
 }

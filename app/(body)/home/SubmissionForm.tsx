@@ -1,8 +1,6 @@
 'use client';
 
-import { uploadSubmission } from '@/app/api/reviews/upload';
 import { getSchoolPrompts } from '@/app/api/schools/getSchools';
-import { useAuth } from '@clerk/nextjs';
 import { Button, Textarea } from '@nextui-org/react';
 import { redirect } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -24,7 +22,6 @@ export const SubmissionForm = ({ schools }: SubmissionFormProps) => {
 
   const [reviewId, setReviewId] = useState<string>('');
 
-  const { userId } = useAuth();
 
   useEffect(() => {
     const setNewPrompts = async () => {
@@ -71,13 +68,6 @@ export const SubmissionForm = ({ schools }: SubmissionFormProps) => {
 
     // generate a review id
 
-    const response = await uploadSubmission({
-      userId,
-      school,
-      essayPrompt,
-      essayText: essay,
-    });
-
     // add this to a database with all of the submission information
 
     // post request to API to generate the review
@@ -85,9 +75,6 @@ export const SubmissionForm = ({ schools }: SubmissionFormProps) => {
     // await 2 seconds
 
     setIsLoading(false);
-    if (response.reviewId) {
-      setReviewId(response.reviewId);
-    }
   };
 
   if (reviewId) {

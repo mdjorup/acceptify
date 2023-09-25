@@ -1,6 +1,5 @@
 'use client';
 
-import { UserButton } from '@clerk/nextjs';
 import { Navbar, NavbarBrand, NavbarContent } from '@nextui-org/react';
 import { usePathname } from 'next/navigation';
 import { HeaderItem } from './HeaderItem';
@@ -26,7 +25,7 @@ export const Header = () => {
         />
       </NavbarContent>
       <NavbarContent justify="end">
-        <UserButton afterSignOutUrl="/" />
+        <span>User</span>
       </NavbarContent>
     </Navbar>
   );
