@@ -22,7 +22,6 @@ export const SubmissionForm = ({ schools }: SubmissionFormProps) => {
 
   const [reviewId, setReviewId] = useState<string>('');
 
-
   useEffect(() => {
     const setNewPrompts = async () => {
       const newPrompts = await getSchoolPrompts(school);
