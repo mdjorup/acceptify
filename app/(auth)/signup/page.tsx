@@ -44,7 +44,7 @@ const Login = () => {
     // tailwind for an auth card
     <div className="w-full max-w-md rounded-lg bg-white p-8 ">
       <h1 className="mb-6 text-2xl font-semibold text-gray-700">
-        Create an Account with {APP_NAME}
+        Sign Up for {APP_NAME}
       </h1>
       <div className="mb-4 flex w-full flex-wrap gap-4">
         <Input

@@ -28,9 +28,14 @@ export default async function BodyLayout({
     redirect('/login');
   }
 
+  if (session.user.email_confirmed_at === null) {
+    // this is a protected route - only users who are signed in can view this route
+    redirect('/confirm-email');
+  }
+
   return (
     <div className="mx-auto max-w-screen-xl px-4 py-4 sm:px-6 lg:px-8">
-      <Header />
+      <Header session={session} />
       {children}
     </div>
   );

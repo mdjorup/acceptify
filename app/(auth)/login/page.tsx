@@ -61,6 +61,7 @@ const Login = () => {
           className="mb-4 transform rounded bg-gradient-to-r from-purple-500 to-blue-500 px-4 py-2 text-white shadow transition hover:-translate-y-1 hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500"
           onClick={handleLogin}
           disabled={!email || !password}
+          type="submit"
         >
           Log In
         </Button>
