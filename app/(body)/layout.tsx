@@ -1,5 +1,5 @@
 import { Header } from '@/components/Header';
-import { Database } from '@/types/supabase';
+import { Database } from '@/shared/supabase';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';

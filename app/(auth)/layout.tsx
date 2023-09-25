@@ -1,4 +1,4 @@
-import { Database } from '@/types/supabase';
+import { Database } from '@/shared/supabase';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -14,6 +14,7 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
 
   const {
     data: { session },
+    error,
   } = await supabase.auth.getSession();
 
   if (session) {

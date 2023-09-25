@@ -11,29 +11,40 @@ import { useState } from 'react';
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
   const supabase = createClientComponentClient<Database>();
 
-  const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) {
-      setErrorMessage("We couldn't log you in. Please try again.");
-      setEmail('');
+  const handleSignUp = async () => {
+    if (password !== confirmPassword) {
+      setErrorMessage('Passwords do not match.');
       setPassword('');
+      setConfirmPassword('');
       return;
     }
-    router.refresh();
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
+    });
+    if (error) {
+      setErrorMessage("We couldn't sign you up. Please try again.");
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      return;
+    }
+    router.replace('/confirm-email');
   };
 
   return (
     // tailwind for an auth card
     <div className="w-full max-w-md rounded-lg bg-white p-8 ">
       <h1 className="mb-6 text-2xl font-semibold text-gray-700">
-        Log In to {APP_NAME}
+        Create an Account with {APP_NAME}
       </h1>
       <div className="mb-4 flex w-full flex-wrap gap-4">
         <Input
@@ -54,20 +65,29 @@ const Login = () => {
           placeholder="Enter your password"
           fullWidth
         />
+        <Input
+          value={confirmPassword}
+          type="password"
+          label="Confirm Password"
+          variant="flat"
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="Confirm your password"
+          fullWidth
+        />
       </div>
       {errorMessage && <p className="mb-4 text-red-500">{errorMessage}</p>}
       <div className="flex flex-col items-center">
         <Button
           className="mb-4 transform rounded bg-gradient-to-r from-purple-500 to-blue-500 px-4 py-2 text-white shadow transition hover:-translate-y-1 hover:cursor-pointer hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500"
-          onClick={handleLogin}
-          disabled={!email || !password}
+          onClick={handleSignUp}
+          disabled={!email || !password || !confirmPassword}
         >
-          Log In
+          Sign Up
         </Button>
         <p className="text-gray-600">
-          Don't have an account?{' '}
+          Have an account?{' '}
           <Link href="/signup" className="text-blue-500 hover:underline">
-            Sign Up instead
+            Log in instead
           </Link>
         </p>
       </div>
