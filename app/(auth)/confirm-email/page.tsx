@@ -8,7 +8,7 @@ const ConfirmEmail = () => {
         <p className="mb-4 text-gray-700">
           Please check your inbox and confirm your email address to continue.
         </p>
-        <Link href="/home">Landing Page</Link>
+        <Link href="/">Landing Page</Link>
       </div>
     </div>
   );

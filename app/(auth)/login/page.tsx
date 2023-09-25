@@ -21,6 +21,10 @@ const Login = () => {
       password,
     });
     if (error) {
+      if (error.message === 'Email not confirmed') {
+        router.replace('/confirm-email');
+        return;
+      }
       setErrorMessage("We couldn't log you in. Please try again.");
       setEmail('');
       setPassword('');

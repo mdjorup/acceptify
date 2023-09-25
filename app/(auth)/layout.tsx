@@ -17,10 +17,10 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
     error,
   } = await supabase.auth.getSession();
 
-  if (session) {
-    // users who are logged in should not be able to log in again
+  if (session !== null) {
     redirect('/home');
   }
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-background pb-40">
       {children}
