@@ -9,21 +9,27 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      users: {
+      profiles: {
         Row: {
-          createdAt: string;
-          subscriptionId: number;
-          userId: string;
+          created_at: string;
+          email: string;
+          freeReviews: number | null;
+          id: string;
+          subscriptionId: number | null;
         };
         Insert: {
-          createdAt?: string;
-          subscriptionId?: number;
-          userId: string;
+          created_at?: string;
+          email?: string;
+          freeReviews?: number | null;
+          id?: string;
+          subscriptionId?: number | null;
         };
         Update: {
-          createdAt?: string;
-          subscriptionId?: number;
-          userId?: string;
+          created_at?: string;
+          email?: string;
+          freeReviews?: number | null;
+          id?: string;
+          subscriptionId?: number | null;
         };
         Relationships: [];
       };

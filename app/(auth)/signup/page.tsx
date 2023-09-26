@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-const Login = () => {
+const SignUp = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
@@ -23,14 +23,15 @@ const Login = () => {
       setConfirmPassword('');
       return;
     }
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
       },
     });
-    if (error) {
+
+    if (error || data.user === null || data.user.email === undefined) {
       setErrorMessage("We couldn't sign you up. Please try again.");
       setEmail('');
       setPassword('');
@@ -95,4 +96,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignUp;
