@@ -47,7 +47,7 @@ const Page = async () => {
             <h3 className="mb-4 text-xl font-bold">Receive AI Feedback</h3>
             <p>
               {/* Fill in the description here */}
-              Get insights on your essay's structure, tone, and content.
+              Get insights on your essay&apos;s structure, tone, and content.
             </p>
           </div>
           {/* Feature 3 */}
