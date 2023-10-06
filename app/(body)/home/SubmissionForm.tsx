@@ -1,94 +1,69 @@
 'use client';
 
-import { getSchoolPrompts } from '@/app/api/schools/getSchools';
-import { Button, Textarea } from '@nextui-org/react';
-import { redirect } from 'next/navigation';
+import { Prompt, School } from '@/shared/types';
+import { Select, SelectItem, Selection } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
-import { EssayPromptInput } from './EssayPromptInput';
-import { SchoolInput } from './SchoolInput';
 
 interface SubmissionFormProps {
-  schools: string[];
+  schools: School[];
+  prompts: Prompt[];
 }
 
-export const SubmissionForm = ({ schools }: SubmissionFormProps) => {
-  // let's make this more object oriented in the future
-  const [school, setSchool] = useState<string>('');
-  const [essayPrompts, setEssayPrompts] = useState<string[]>([]);
-  const [essayPrompt, setEssayPrompt] = useState<string>('');
-  const [essay, setEssay] = useState<string>('');
-
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const [reviewId, setReviewId] = useState<string>('');
+export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
+  const [selectedSchoolId, setSelectedSchoolId] = useState<number | null>(null);
+  const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>([]);
 
   useEffect(() => {
-    const setNewPrompts = async () => {
-      const newPrompts = await getSchoolPrompts(school);
-      setEssayPrompts(newPrompts);
-    };
-    setNewPrompts();
-  }, [school]);
+    if (selectedSchoolId) {
+      const relevantPrompts = prompts.filter(
+        (prompt) => prompt.school_id === selectedSchoolId,
+      );
+      setFilteredPrompts(relevantPrompts);
+    } else {
+      setFilteredPrompts([]);
+    }
+  }, [selectedSchoolId, prompts]);
 
-  const onSelectingSchool = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSchool(e.target.value);
-    setEssayPrompts([]);
-    setEssayPrompt('');
-    setEssay('');
+  const handleSchoolSelectionChange = (keys: Selection) => {
+    if (keys === 'all') {
+      return;
+    }
+    const selectedSchoolId = Number(keys.values().next().value);
+    setSelectedSchoolId(selectedSchoolId);
   };
-
-  const onSelectingEssayPrompt = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setEssayPrompt(e.target.value);
-    setEssay('');
-  };
-
-  const clearForm = () => {
-    setSchool('');
-    setEssayPrompts([]);
-    setEssayPrompt('');
-    setEssay('');
-  };
-
-  const wordCount = (): number => {
-    if (!essay) return 0;
-    return essay.trim().split(/\s+/).length;
-  };
-
-  const isValid = (): boolean => {
-    return wordCount() <= 650;
-  };
-
-  const hasAllFields = (): boolean => {
-    return school !== '' && essayPrompt !== '' && essay !== '';
-  };
-
-  const handleSubmit = async () => {
-    setIsLoading(true);
-
-    // generate a review id
-
-    // add this to a database with all of the submission information
-
-    // post request to API to generate the review
-
-    // await 2 seconds
-
-    setIsLoading(false);
-  };
-
-  if (reviewId) {
-    redirect(`/reviews/${reviewId}/status`);
-  }
 
   return (
     <div className="mx-auto mt-10 w-10/12 space-y-4 p-6">
-      <SchoolInput
-        schools={schools}
-        onSelectingSchool={onSelectingSchool}
-        isDisabled={isLoading}
-      />
+      <Select
+        label="School"
+        placeholder="Select a School"
+        className="max-w-xs"
+        isRequired={true}
+        onSelectionChange={handleSchoolSelectionChange}
+      >
+        {schools &&
+          schools.map((school) => (
+            <SelectItem key={school.id} value={school.id}>
+              {school.official_name}
+            </SelectItem>
+          ))}
+      </Select>
+      <Select
+        label="Essay Prompt"
+        placeholder="Select an Essay Prompt"
+        className="max-w-xs"
+        isRequired={true}
+        isDisabled={selectedSchoolId == null}
+      >
+        {filteredPrompts &&
+          filteredPrompts.map((prompt) => (
+            <SelectItem key={prompt.id} value={prompt.prompt_text}>
+              {prompt.prompt_text}
+            </SelectItem>
+          ))}
+      </Select>
 
-      <EssayPromptInput
+      {/* <EssayPromptInput
         essayPrompts={essayPrompts}
         onSelectingEssayPrompt={onSelectingEssayPrompt}
         isDisabled={school === '' || isLoading}
@@ -104,16 +79,16 @@ export const SubmissionForm = ({ schools }: SubmissionFormProps) => {
         validationState={isValid() ? 'valid' : 'invalid'}
         onValueChange={setEssay}
         className="rounded"
-      ></Textarea>
+      ></Textarea> */}
 
-      <Button
+      {/* <Button
         color="primary"
         isDisabled={!hasAllFields()}
         onClick={handleSubmit}
         isLoading={isLoading}
       >
         Generate
-      </Button>
+      </Button> */}
     </div>
   );
 };

@@ -1,5 +1,7 @@
 const AllReviewsPage = () => {
   // fetch all reviews for the given user
 
-  return <></>;
+  return <div>Reviews</div>;
 };
+
+export default AllReviewsPage;

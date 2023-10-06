@@ -6,16 +6,34 @@
  *
  *
  */
+import { Prompt, School } from '@/shared/types';
 import { SubmissionForm } from './SubmissionForm';
 
-import { getSchools } from '@/app/api/schools/getSchools';
-
 const Dashboard = async () => {
-  const schools = await getSchools();
+  const schoolsResponsePromise = fetch('http://localhost:3000/api/schools', {
+    method: 'GET',
+    next: { revalidate: 3600 },
+  });
+
+  const promptsResponsePromise = fetch('http://localhost:3000/api/prompts', {
+    method: 'GET',
+    next: { revalidate: 3600 },
+  });
+
+  const [schoolsResponse, promptsResponse] = await Promise.all([
+    schoolsResponsePromise,
+    promptsResponsePromise,
+  ]);
+
+  let schools: School[] = [];
+  let prompts: Prompt[] = [];
+
+  schools = await schoolsResponse.json().then((response) => response.data);
+  prompts = await promptsResponse.json().then((response) => response.data);
 
   return (
     <div>
-      <SubmissionForm schools={schools} />
+      <SubmissionForm schools={schools} prompts={prompts} />
     </div>
   );
 };

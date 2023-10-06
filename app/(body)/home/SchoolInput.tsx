@@ -1,9 +1,10 @@
 'use client';
 
+import { School } from '@/shared/types';
 import { Select, SelectItem } from '@nextui-org/react';
 
 interface SchoolInputProps {
-  schools: string[];
+  schools: School[];
   isDisabled: boolean;
   onSelectingSchool: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
@@ -26,8 +27,8 @@ export const SchoolInput = ({
     >
       {schools &&
         schools.map((school, i) => (
-          <SelectItem key={school} value={i}>
-            {school}
+          <SelectItem key={school.id} value={i}>
+            {school.official_name}
           </SelectItem>
         ))}
     </Select>
