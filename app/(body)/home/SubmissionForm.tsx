@@ -1,7 +1,7 @@
 'use client';
 
 import { Prompt, School } from '@/shared/types';
-import { Select, SelectItem, Selection } from '@nextui-org/react';
+import { Select, SelectItem, Selection, Textarea } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 
 interface SubmissionFormProps {
@@ -10,34 +10,59 @@ interface SubmissionFormProps {
 }
 
 export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
-  const [selectedSchoolId, setSelectedSchoolId] = useState<number | null>(null);
+  const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
+  const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>([]);
 
   useEffect(() => {
-    if (selectedSchoolId) {
+    if (selectedSchool != null) {
       const relevantPrompts = prompts.filter(
-        (prompt) => prompt.school_id === selectedSchoolId,
+        (prompt) => prompt.school_id === selectedSchool.id,
       );
       setFilteredPrompts(relevantPrompts);
     } else {
       setFilteredPrompts([]);
     }
-  }, [selectedSchoolId, prompts]);
+  }, [selectedSchool, prompts]);
 
   const handleSchoolSelectionChange = (keys: Selection) => {
     if (keys === 'all') {
       return;
     }
     const selectedSchoolId = Number(keys.values().next().value);
-    setSelectedSchoolId(selectedSchoolId);
+    const selectedSchool = schools.find(
+      (school) => school.id === selectedSchoolId,
+    );
+    if (selectedSchool == null) {
+      return;
+    }
+    setSelectedSchool(selectedSchool);
+    setSelectedPrompt(null);
   };
 
+  const handlePromptSelectionChange = (keys: Selection) => {
+    // Add this handler
+    if (keys === 'all') {
+      return;
+    }
+    const selectedPromptId = Number(keys.values().next().value);
+    const selectedPrompt = prompts.find(
+      (prompt) => prompt.id === selectedPromptId,
+    ) as Prompt;
+    if (selectedSchool == null) {
+      return;
+    }
+    setSelectedPrompt(selectedPrompt);
+  };
+
+  const isValidEssay = () => {};
+
   return (
-    <div className="mx-auto mt-10 w-10/12 space-y-4 p-6">
+    <div className="mx-auto mt-10 flex w-10/12 flex-col space-y-4 p-6">
       <Select
         label="School"
         placeholder="Select a School"
-        className="max-w-xs"
+        className="w-2/3"
         isRequired={true}
         onSelectionChange={handleSchoolSelectionChange}
       >
@@ -51,17 +76,24 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
       <Select
         label="Essay Prompt"
         placeholder="Select an Essay Prompt"
-        className="max-w-xs"
+        className="w-2/3"
         isRequired={true}
-        isDisabled={selectedSchoolId == null}
+        onSelectionChange={handlePromptSelectionChange}
+        isDisabled={selectedSchool == null}
       >
         {filteredPrompts &&
           filteredPrompts.map((prompt) => (
-            <SelectItem key={prompt.id} value={prompt.prompt_text}>
+            <SelectItem key={prompt.id} value={prompt.id}>
               {prompt.prompt_text}
             </SelectItem>
           ))}
       </Select>
+      <Textarea
+        isRequired={true}
+        isDisabled={selectedPrompt == null}
+        label="Essay"
+        placeholder="Paste your essay here"
+      />
 
       {/* <EssayPromptInput
         essayPrompts={essayPrompts}
