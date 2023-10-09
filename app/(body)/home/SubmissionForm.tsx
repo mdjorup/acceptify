@@ -13,6 +13,8 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>([]);
+  const [essayText, setEssayText] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
     if (selectedSchool != null) {
@@ -38,6 +40,7 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
     }
     setSelectedSchool(selectedSchool);
     setSelectedPrompt(null);
+    setEssayText('');
   };
 
   const handlePromptSelectionChange = (keys: Selection) => {
@@ -55,14 +58,58 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
     setSelectedPrompt(selectedPrompt);
   };
 
-  const isValidEssay = () => {};
+  const isInvalidEssay = (): boolean => {
+    if (selectedPrompt == null || essayText == null) {
+      return false;
+    }
+
+    const wordCount = essayText.trim().split(/\s+/).length;
+    const characterCount = essayText.length;
+
+    if (
+      selectedPrompt.max_characters != null &&
+      characterCount > selectedPrompt.max_characters
+    ) {
+      return true;
+    }
+
+    if (
+      selectedPrompt.max_words != null &&
+      wordCount > selectedPrompt.max_words
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const essayDescription = (): string => {
+    if (selectedPrompt == null) {
+      return '';
+    }
+
+    const characterCount = essayText.length;
+    const trimmedEssayText = essayText.trim();
+    const wordCount =
+      trimmedEssayText.length === 0 ? 0 : trimmedEssayText.split(/\s+/).length;
+
+    if (selectedPrompt.max_characters != null) {
+      return `${characterCount} / ${selectedPrompt.max_characters} characters`;
+    }
+
+    if (selectedPrompt.max_words != null) {
+      return `${wordCount} / ${selectedPrompt.max_words} words`;
+    }
+
+    return '';
+  };
 
   return (
     <div className="mx-auto mt-10 flex w-10/12 flex-col space-y-4 p-6">
       <Select
         label="School"
         placeholder="Select a School"
-        className="w-2/3"
+        className="max-w-sm"
         isRequired={true}
         onSelectionChange={handleSchoolSelectionChange}
       >
@@ -76,7 +123,7 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
       <Select
         label="Essay Prompt"
         placeholder="Select an Essay Prompt"
-        className="w-2/3"
+        fullWidth={true}
         isRequired={true}
         onSelectionChange={handlePromptSelectionChange}
         isDisabled={selectedSchool == null}
@@ -91,27 +138,14 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
       <Textarea
         isRequired={true}
         isDisabled={selectedPrompt == null}
+        validationState={isInvalidEssay() ? 'invalid' : 'valid'}
+        errorMessage={errorMessage}
+        description={essayDescription()}
         label="Essay"
         placeholder="Paste your essay here"
+        value={essayText}
+        onValueChange={setEssayText}
       />
-
-      {/* <EssayPromptInput
-        essayPrompts={essayPrompts}
-        onSelectingEssayPrompt={onSelectingEssayPrompt}
-        isDisabled={school === '' || isLoading}
-      />
-
-      <Textarea
-        isRequired={true}
-        isDisabled={school === '' || essayPrompt === '' || isLoading}
-        label="Essay"
-        placeholder="Paste your essay here"
-        required={true}
-        description={`${wordCount()} / ${650}`}
-        validationState={isValid() ? 'valid' : 'invalid'}
-        onValueChange={setEssay}
-        className="rounded"
-      ></Textarea> */}
 
       {/* <Button
         color="primary"
