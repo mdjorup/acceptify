@@ -1,7 +1,13 @@
 'use client';
 
 import { Prompt, School } from '@/shared/types';
-import { Select, SelectItem, Selection, Textarea } from '@nextui-org/react';
+import {
+  Button,
+  Select,
+  SelectItem,
+  Selection,
+  Textarea,
+} from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 
 interface SubmissionFormProps {
@@ -15,6 +21,7 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
   const [filteredPrompts, setFilteredPrompts] = useState<Prompt[]>([]);
   const [essayText, setEssayText] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     if (selectedSchool != null) {
@@ -104,8 +111,47 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
     return '';
   };
 
+  const hasAllFields = (): boolean => {
+    return selectedSchool != null && selectedPrompt != null && essayText !== '';
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (selectedSchool == null || selectedPrompt == null || essayText === '') {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const formData = new FormData();
+    formData.append('school_id', selectedSchool.id.toString());
+    formData.append('prompt_id', selectedPrompt.id.toString());
+    formData.append('essay_content', essayText);
+
+    const response = await fetch('/api/reviews', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (data.error != null) {
+      setErrorMessage(data.error);
+    } else {
+      setErrorMessage('');
+    }
+
+    setIsSubmitting(false);
+
+    // redirect("/reviews"); // TODO: uncomment
+  };
+
   return (
-    <div className="mx-auto mt-10 flex w-10/12 flex-col space-y-4 p-6">
+    <form
+      className="mx-auto mt-10 flex w-10/12 flex-col space-y-4 p-6"
+      onSubmit={handleSubmit}
+    >
       <Select
         label="School"
         placeholder="Select a School"
@@ -147,14 +193,14 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
         onValueChange={setEssayText}
       />
 
-      {/* <Button
+      <Button
         color="primary"
         isDisabled={!hasAllFields()}
-        onClick={handleSubmit}
-        isLoading={isLoading}
+        type="submit"
+        isLoading={isSubmitting}
       >
         Generate
-      </Button> */}
-    </div>
+      </Button>
+    </form>
   );
 };
