@@ -1,4 +1,5 @@
 import { Database } from '@/shared/supabase';
+import { SQS } from '@aws-sdk/client-sqs';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
@@ -36,6 +37,8 @@ export async function POST(request: NextRequest) {
   }
 
   // insert into reviews table, then get review id
+  // TODO: insert other information about the review as well
+
   const { data: review_data, error: review_error } = await supabase
     .from('reviews')
     .insert({
@@ -53,8 +56,21 @@ export async function POST(request: NextRequest) {
 
   const review_id = review_data.id;
 
+  const sqs = new SQS();
+
+  // send to SQS queue
+  const queue_params = {
+    QueueUrl: process.env.SQS_QUEUE_URL ?? '',
+    MessageBody: JSON.stringify({ review_id: review_id }),
+  };
+
+  const { MessageId } = await sqs.sendMessage(queue_params);
+
   return Response.json({
-    data: review_data,
+    data: {
+      ...review_data,
+      MessageId,
+    },
     error: review_error,
   });
 }
