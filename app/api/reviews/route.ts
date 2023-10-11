@@ -8,19 +8,12 @@ import { NextRequest } from 'next/server';
 export async function POST(request: NextRequest) {
   const formData = await request.formData();
 
-  console.log('got form data');
-
   const cookieStore = cookies();
-  console.log('loaded cookies');
   const supabase = createRouteHandlerClient<Database>({
     cookies: () => cookieStore,
   });
 
-  console.log('created supabase client');
-
   const { data, error } = await supabase.auth.getUser();
-
-  console.log(data, error);
 
   const user = data.user;
 
@@ -42,8 +35,6 @@ export async function POST(request: NextRequest) {
   ) {
     return Response.error();
   }
-
-  console.log('validated form data');
 
   // insert into reviews table, then get review id
   // TODO: insert other information about the review as well

@@ -8,6 +8,7 @@ import {
   Selection,
   Textarea,
 } from '@nextui-org/react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 interface SubmissionFormProps {
@@ -22,6 +23,8 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
   const [essayText, setEssayText] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     if (selectedSchool != null) {
@@ -144,7 +147,7 @@ export const SubmissionForm = ({ schools, prompts }: SubmissionFormProps) => {
 
     setIsSubmitting(false);
 
-    // redirect("/reviews"); // TODO: uncomment
+    router.replace('/reviews'); // TODO: uncomment
   };
 
   return (
