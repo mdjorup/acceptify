@@ -23,7 +23,7 @@ export default async function BodyLayout({
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session) {
+  if (session === null) {
     // this is a protected route - only users who are signed in can view this route
     redirect('/login');
   }

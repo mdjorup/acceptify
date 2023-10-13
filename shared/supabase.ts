@@ -20,7 +20,7 @@ export interface Database {
           created_at?: string;
           email?: string;
           free_reviews?: number | null;
-          id?: string;
+          id: string;
         };
         Update: {
           created_at?: string;
@@ -28,7 +28,14 @@ export interface Database {
           free_reviews?: number | null;
           id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'profiles_id_fkey';
+            columns: ['id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       prompts: {
         Row: {
@@ -105,7 +112,7 @@ export interface Database {
           {
             foreignKeyName: 'reviews_user_id_fkey';
             columns: ['user_id'];
-            referencedRelation: 'profiles';
+            referencedRelation: 'users';
             referencedColumns: ['id'];
           },
         ];
