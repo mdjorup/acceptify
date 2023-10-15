@@ -13,9 +13,9 @@ import format from 'date-fns/format';
 
 export interface ReviewWithRelations extends Omit<Review, 'prompt_id'> {
   prompt_id: Review['prompt_id'];
-  prompts: {
+  prompt: {
     id: Prompt['id'];
-    school_id: Prompt['school_id'];
+    prompt_text: Prompt['prompt_text'];
     schools: School | null;
   } | null;
 }
@@ -43,8 +43,8 @@ const ReviewsTable = ({ reviews }: ReviewsTableProps) => {
               <TableCell>
                 {format(new Date(review.created_at), "MM/dd/yyyy 'at' h:mm a")}
               </TableCell>
-              <TableCell>{'School'}</TableCell>
-              <TableCell>{'Prompt'}</TableCell>
+              <TableCell>{review.prompt?.schools?.official_name}</TableCell>
+              <TableCell>{review.prompt?.prompt_text}</TableCell>
 
               <TableCell>{review.status}</TableCell>
               <TableCell>{'view'}</TableCell>

@@ -36,9 +36,9 @@ const AllReviewsPage = async () => {
     user_id,
     general_feedback,
     status,
-    prompts: prompts (
+    prompt: prompts (
       id,
-      school_id,
+      prompt_text,
       schools: schools (
         id,
         official_name
