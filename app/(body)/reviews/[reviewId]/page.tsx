@@ -1,48 +1,28 @@
+import { Database } from '@/shared/supabase';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-export interface ReviewPageProps {
-  reviewId: string;
-}
+const SingleReviewPage = async ({
+  params,
+}: {
+  params: { reviewId: string };
+}) => {
+  // get the review from supabase
 
-export interface IReviewProgress {
-  progress: number;
-}
+  const supabase = createServerComponentClient<Database>({ cookies });
 
-interface IReview {
-  reviewId: string;
-  essayContent: string;
-  essayPrompt: string;
-  complete?: boolean;
-}
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-const updateReviewProgress = (reviewId: string): IReviewProgress => {
-  return { progress: 90 };
-};
+  const user_id = session?.user.id;
 
-const ReviewPage = ({ params }: { params: ReviewPageProps }) => {
-  const { reviewId } = params;
-
-  // make sure that the user has access to the review
-  let hasAccess = true;
-
-  if (!hasAccess) {
-    redirect('/home');
+  if (user_id == null) {
+    redirect('/login');
   }
 
-  // get review info
-
-  const review: IReview = {
-    reviewId: reviewId,
-    essayContent: '',
-    essayPrompt: '',
-    complete: true,
-  };
-
-  if (!review.complete) {
-    redirect(`/reviews/${reviewId}/status`);
-  }
-
-  return <div>Summary of the review! {JSON.stringify(review)}</div>;
+  return <div>SingleReviewPage {params.reviewId}</div>;
 };
 
-export default ReviewPage;
+export default SingleReviewPage;

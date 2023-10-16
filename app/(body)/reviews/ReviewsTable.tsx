@@ -2,6 +2,7 @@
 
 import { Prompt, Review, School } from '@/shared/types';
 import {
+  Link,
   Table,
   TableBody,
   TableCell,
@@ -26,6 +27,19 @@ interface ReviewsTableProps {
   // onReviewEdit: (review: Review) => void;
 }
 
+const getTableCellStatusClass = (status: string | null) => {
+  switch (status) {
+    case 'pending':
+      return 'text-yellow-500';
+    case 'in progress':
+      return 'text-blue-500';
+    case 'complete':
+      return 'text-green-500';
+    default:
+      return ''; // Default color for unknown statuses
+  }
+};
+
 const ReviewsTable = ({ reviews }: ReviewsTableProps) => {
   return (
     <div>
@@ -46,8 +60,21 @@ const ReviewsTable = ({ reviews }: ReviewsTableProps) => {
               <TableCell>{review.prompt?.schools?.official_name}</TableCell>
               <TableCell>{review.prompt?.prompt_text}</TableCell>
 
-              <TableCell>{review.status}</TableCell>
-              <TableCell>{'view'}</TableCell>
+              <TableCell className={getTableCellStatusClass(review.status)}>
+                {review.status &&
+                  review.status.charAt(0).toUpperCase() +
+                    review.status.slice(1)}
+              </TableCell>
+              <TableCell>
+                <Link
+                  isBlock
+                  showAnchorIcon
+                  href={`/reviews/${review.id}`}
+                  color="foreground"
+                >
+                  View
+                </Link>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
